@@ -1,10 +1,18 @@
-import express from 'express';
-const app = express();
-const port = 3000;
+import app from './src/app';
+import { config } from './src/config/config';
+import connectDb from './src/config/db';
 
-app.get('/', (req, res) => {
-  res.send('Hello World from Doctor App!');
-});
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
-});
+const startServer = async () => {
+  //database connection
+  await connectDb();
+  const port = config.port;
+  //server connection
+  app.get('/', (req, res) => {
+    res.send('Doctor App Backend is running');
+  });
+  app.listen(port, () => {
+    console.log(`Server is running on ${port}`);
+  });
+};
+
+startServer();
