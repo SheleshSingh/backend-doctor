@@ -1,16 +1,48 @@
 import { z } from 'zod';
 export const doctorSchemaZod = z.object({
-  name: z.string().trim().min(2).max(50),
-  email: z.string().trim().min(5).max(100).email(),
-  password: z.string().min(6).max(100),
-  image: z.string().trim().min(2).max(100),
-  speciality: z.string().trim().min(2).max(100),
-  degree: z.string().trim().min(2).max(100),
-  experience: z.string().trim().min(2).max(100),
-  about: z.string().trim().min(2).max(500),
+  name: z
+    .string()
+    .trim()
+    .min(2, 'Name is required')
+    .max(50, 'Name is too long'),
+  email: z
+    .string()
+    .trim()
+    .min(5, 'Email is required')
+    .max(100, 'Email is too long')
+    .email('Invalid email format'),
+  password: z
+    .string()
+    .min(6, 'Password is required')
+    .max(100, 'Password is too long'),
+  image: z
+    .string()
+    .trim()
+    .min(2, 'Image is required')
+    .max(100, 'Image is too long'),
+  speciality: z
+    .string()
+    .trim()
+    .min(2, 'Speciality is required')
+    .max(100, 'Speciality is too long'),
+  degree: z
+    .string()
+    .trim()
+    .min(2, 'Degree is required')
+    .max(100, 'Degree is too long'),
+  experience: z
+    .string()
+    .trim()
+    .min(2, 'Experience is required')
+    .max(100, 'Experience is too long'),
+  about: z
+    .string()
+    .trim()
+    .min(2, 'About is required')
+    .max(500, 'About is too long'),
   available: z.boolean(),
-  fees: z.number().min(0),
-  address: z.record(z.string(), z.any()),
-  date: z.number().int().min(0),
-  slots_booked: z.record(z.string(), z.any()).optional(),
+  fees: z.number().min(0, 'Fees must be a positive number'),
+  address: z.object({}).strict(),
+  date: z.number().int().min(0, 'Date must be a positive integer'),
+  slots_booked: z.object({}).default({}),
 });

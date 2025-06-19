@@ -1,8 +1,11 @@
 import doctorModel from '../models/doctorModel';
 import asyncHandler from '../utils/asyncHandler';
 import CustomError from '../utils/customError';
+import { doctorSchemaZod } from '../validators/doctorsValidation';
 
 const createDoctor = asyncHandler(async (req, res, next) => {
+  const doctorValidation = doctorSchemaZod.parse(req.body);
+  if (!doctorValidation) throw new CustomError('Invalid doctor data', 400);
   const {
     email,
     name,
@@ -26,7 +29,7 @@ const createDoctor = asyncHandler(async (req, res, next) => {
   let doctor = await doctorModel.create({
     name,
     email,
-    password,   
+    password,
     image,
     speciality,
     degree,

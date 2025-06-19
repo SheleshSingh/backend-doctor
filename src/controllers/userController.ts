@@ -5,10 +5,9 @@ import { userSchemaZod } from '../validators/userValidation';
 
 const createUser = asyncHandler(async (req, res, next) => {
   try {
-    const userValidation = userSchemaZod.safeParse(req.body);
-    if (!userValidation.success) {
-      throw new CustomError('Invalid user data', 400);
-    }
+    const userValidation = userSchemaZod.parse(req.body);
+    if (!userValidation) throw new CustomError('Invalid user data', 400);
+
     const { name, email, password, image, address, gender, dob, phone } =
       req.body;
     const existingUser = await userModel.findOne({ email });
@@ -22,7 +21,7 @@ const createUser = asyncHandler(async (req, res, next) => {
       gender,
       dob,
       phone,
-    }); 
+    });
     res.status(201).json({ message: 'User created successfully', user });
   } catch (error) {
     next(error);
